@@ -5,13 +5,13 @@ import (
 	"errors"
 	"math/big"
 
-	"github.com/apple/foundationdb/bindings/go/src/fdb"
-	"github.com/apple/foundationdb/bindings/go/src/fdb/directory"
-	"github.com/apple/foundationdb/bindings/go/src/fdb/subspace"
-	"github.com/apple/foundationdb/bindings/go/src/fdb/tuple"
+	// "github.com/apple/foundationdb/bindings/go/src/fdb"
+	// "github.com/apple/foundationdb/bindings/go/src/fdb/directory"
+	// "github.com/apple/foundationdb/bindings/go/src/fdb/subspace"
+	// "github.com/apple/foundationdb/bindings/go/src/fdb/tuple"
 
-	"github.com/shamatar/go-plasma/types"
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/shamatar/go-plasma/types"
 )
 
 const (
@@ -64,29 +64,29 @@ func CreateCorrespondingUTXOIndexForInput(tx *SignedTransaction, inputNumber int
 	return indexCopy, nil
 }
 
-func CreateFdbUTXOIndexForInput(db fdb.Database, tx *SignedTransaction, inputNumber int) (subspace.Subspace, error) {
-	if inputNumber > len(tx.UnsignedTransaction.Inputs) {
-		return nil, errors.New("Invalid input number")
-	}
-	input := tx.UnsignedTransaction.Inputs[inputNumber]
-	from, err := tx.GetFrom()
-	if err != nil {
-		return nil, err
-	}
-	addressDirectory, err := directory.CreateOrOpen(db, []string{"utxo"}, nil)
-	// fmt.Println(common.ToHex(addressDirectory.Bytes()))
-	fullSubspace := addressDirectory.Sub(tuple.Tuple{from[:]})
-	// fmt.Println(common.ToHex(fullSubspace.Bytes()))
-	fullSubspace = fullSubspace.Sub(tuple.Tuple{input.BlockNumber[:]})
-	// fmt.Println(common.ToHex(fullSubspace.Bytes()))
-	fullSubspace = fullSubspace.Sub(tuple.Tuple{input.TransactionNumber[:]})
-	// fmt.Println(common.ToHex(fullSubspace.Bytes()))
-	fullSubspace = fullSubspace.Sub(tuple.Tuple{input.OutputNumber[:]})
-	// fmt.Println(common.ToHex(fullSubspace.Bytes()))
-	fullSubspace = fullSubspace.Sub(tuple.Tuple{input.Value[:]})
-	// fmt.Println(common.ToHex(fullSubspace.Bytes()))
-	return fullSubspace, nil
-}
+// func CreateFdbUTXOIndexForInput(db fdb.Database, tx *SignedTransaction, inputNumber int) (subspace.Subspace, error) {
+// 	if inputNumber > len(tx.UnsignedTransaction.Inputs) {
+// 		return nil, errors.New("Invalid input number")
+// 	}
+// 	input := tx.UnsignedTransaction.Inputs[inputNumber]
+// 	from, err := tx.GetFrom()
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	addressDirectory, err := directory.CreateOrOpen(db, []string{"utxo"}, nil)
+// 	// fmt.Println(common.ToHex(addressDirectory.Bytes()))
+// 	fullSubspace := addressDirectory.Sub(tuple.Tuple{from[:]})
+// 	// fmt.Println(common.ToHex(fullSubspace.Bytes()))
+// 	fullSubspace = fullSubspace.Sub(tuple.Tuple{input.BlockNumber[:]})
+// 	// fmt.Println(common.ToHex(fullSubspace.Bytes()))
+// 	fullSubspace = fullSubspace.Sub(tuple.Tuple{input.TransactionNumber[:]})
+// 	// fmt.Println(common.ToHex(fullSubspace.Bytes()))
+// 	fullSubspace = fullSubspace.Sub(tuple.Tuple{input.OutputNumber[:]})
+// 	// fmt.Println(common.ToHex(fullSubspace.Bytes()))
+// 	fullSubspace = fullSubspace.Sub(tuple.Tuple{input.Value[:]})
+// 	// fmt.Println(common.ToHex(fullSubspace.Bytes()))
+// 	return fullSubspace, nil
+// }
 
 func CreateUTXOIndexForOutput(tx *SignedTransaction, blockNumber uint32, transactionNumber uint32, outputNumber int) ([UTXOIndexLength]byte, error) {
 	if outputNumber > len(tx.UnsignedTransaction.Outputs) {
