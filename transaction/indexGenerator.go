@@ -11,7 +11,7 @@ import (
 	// "github.com/apple/foundationdb/bindings/go/src/fdb/tuple"
 
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/shamatar/go-plasma/types"
+	"github.com/matterinc/PlasmaCommons/types"
 )
 
 const (
