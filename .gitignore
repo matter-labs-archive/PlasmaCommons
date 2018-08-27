@@ -1,0 +1,6 @@
+.vscode
+*/**/debug*
+debug*
+server
+go-plasma
+vendor
