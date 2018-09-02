@@ -220,3 +220,53 @@ func ParseUTXOindexNumberIntoDetails(indexBN *types.BigInt) (*ShortUTXOdetails, 
 	outputNumber := uint8(outputNumberBytes[0])
 	return &ShortUTXOdetails{blockNumber, transactionNumber, outputNumber}, nil
 }
+
+func ParseUTXOindexBigIntIntoDetails(indexBN *big.Int) (*ShortUTXOdetails, error) {
+	if indexBN.Cmp(MaxUTXOIndex) != -1 {
+		return nil, errors.New("Index is too large")
+	}
+	index := indexBN.Bytes()
+	if len(index) < ShortUTXOIndexLength {
+		padding := make([]byte, ShortUTXOIndexLength-len(index))
+		index = append(padding, index...)
+	}
+	idx := 0
+
+	blockNumberBytes := index[idx : idx+BlockNumberLength]
+	idx += BlockNumberLength
+
+	transactionNumberBytes := index[idx : idx+TransactionNumberLength]
+	idx += TransactionNumberLength
+
+	outputNumberBytes := index[idx : idx+OutputNumberLength]
+	idx += OutputNumberLength
+
+	blockNumber := binary.BigEndian.Uint32(blockNumberBytes)
+	transactionNumber := binary.BigEndian.Uint32(transactionNumberBytes)
+	outputNumber := uint8(outputNumberBytes[0])
+	return &ShortUTXOdetails{blockNumber, transactionNumber, outputNumber}, nil
+}
+
+func CreateFullUTXOindexFromDetails(blockNumber, transactionNumber uint32, outputNumber uint8, owner common.Address, amount *big.Int) ([UTXOIndexLength]byte, error) {
+	index := []byte{}
+
+	blockNumberBuffer := make([]byte, BlockNumberLength)
+	binary.BigEndian.PutUint32(blockNumberBuffer, blockNumber)
+
+	transactionNumberBuffer := make([]byte, TransactionNumberLength)
+	binary.BigEndian.PutUint32(transactionNumberBuffer, transactionNumber)
+
+	valueBytes := common.LeftPadBytes(amount.Bytes(), 32)
+
+	index = append(index, owner[:]...)
+	index = append(index, blockNumberBuffer...)
+	index = append(index, transactionNumberBuffer[:]...)
+	index = append(index, []byte{outputNumber}...)
+	index = append(index, valueBytes...)
+	if len(index) != UTXOIndexLength {
+		return [UTXOIndexLength]byte{}, errors.New("Index length mismatch")
+	}
+	indexCopy := [UTXOIndexLength]byte{}
+	copy(indexCopy[:], index)
+	return indexCopy, nil
+}
