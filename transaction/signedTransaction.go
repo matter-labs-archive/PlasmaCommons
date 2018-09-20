@@ -5,12 +5,12 @@ import (
 	"errors"
 	"io"
 
+	"github.com/ethereum/go-ethereum/common"
 	"github.com/matterinc/PlasmaCommons/crypto"
 	"github.com/matterinc/PlasmaCommons/types"
-	"github.com/ethereum/go-ethereum/common"
-	// "github.com/ethereum/go-ethereum/common/hexutil"
-	secp256k1 "github.com/matterinc/PlasmaCommons/crypto/secp256k1"
+
 	"github.com/ethereum/go-ethereum/rlp"
+	secp256k1 "github.com/matterinc/PlasmaCommons/crypto/secp256k1"
 )
 
 // TransactionInput is one of the inputs into Plasma transaction

@@ -14,7 +14,6 @@ import (
 	common "github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/rlp"
 	"github.com/matterinc/PlasmaCommons/transaction"
-	// "github.com/ethereum/go-ethereum/common/hexutil"
 )
 
 // TransactionInput is one of the inputs into Plasma transaction

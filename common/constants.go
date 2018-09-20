@@ -12,4 +12,5 @@ var (
 	BlockNumberKey         = []byte("blockNumber")
 	TransactionNumberKey   = []byte("txNumber")
 	SpendingIndexKey       = []byte("spend")
+	DepositHistoryPrefix   = []byte("dhist")
 )
