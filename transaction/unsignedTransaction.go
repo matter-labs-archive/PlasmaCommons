@@ -52,11 +52,11 @@ func (tx *UnsignedTransaction) Validate() error {
 	}
 	switch tx.TransactionType[0] {
 	case TransactionTypeSplit:
-		if numInputs != 1 || numOutput > 3 {
+		if numInputs > 3 || numOutput > 3 || numOutput < 2 {
 			return errors.New("Invalid number of inputs or outputs")
 		}
 	case TransactionTypeMerge:
-		if numInputs != 2 || numOutput != 1 {
+		if numInputs > 3 || numOutput != 1 {
 			return errors.New("Invalid number of inputs or outputs")
 		}
 	case TransactionTypeFund:
