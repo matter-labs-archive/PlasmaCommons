@@ -46,21 +46,21 @@ func NewUnsignedTransaction(txType byte, inputs []*TransactionInput, outputs []*
 
 func (tx *UnsignedTransaction) Validate() error {
 	numInputs := len(tx.Inputs)
-	numOutput := len(tx.Outputs)
-	if numInputs == 0 || numOutput == 0 {
+	numOutputs := len(tx.Outputs)
+	if numInputs == 0 || numOutputs == 0 {
 		return errors.New("Empty inputs or outputs")
 	}
 	switch tx.TransactionType[0] {
 	case TransactionTypeSplit:
-		if numInputs > 3 || numOutput > 3 || numOutput < 2 {
+		if numInputs > 3 || numOutputs > 3 {
 			return errors.New("Invalid number of inputs or outputs")
 		}
 	case TransactionTypeMerge:
-		if numInputs > 3 || numOutput != 1 {
+		if numInputs > 3 || numOutputs != 1 {
 			return errors.New("Invalid number of inputs or outputs")
 		}
 	case TransactionTypeFund:
-		if numInputs != 1 || numOutput != 1 {
+		if numInputs != 1 || numOutputs != 1 {
 			return errors.New("Invalid number of inputs or outputs")
 		}
 	default:
